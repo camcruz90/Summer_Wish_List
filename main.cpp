@@ -102,8 +102,10 @@ void findPriority(item *head, int priority) {
 
 //used to copy over parts of an item node in orderPriority
 void copy(item *&destination, item *&source){
-    destination->title = source->title;
-    destination->description = source->description;
+    destination->title = new char[strlen(source->title) + 1];
+    strcpy(destination->title, source->title);
+    destination->description = new char[strlen(source->description) + 1];
+    strcpy(destination->description, source->description);
     destination->priority = source->priority;
     destination->isPlanned = source->isPlanned;
 }
@@ -118,6 +120,7 @@ void orderPriority(item *&head){
             copy(current, current->next);
             current = current->next;
             copy(current, temp);
+            delete temp;
             current = head;
         }
         else {
@@ -166,6 +169,7 @@ void menu(item *&head){
                 break;
             case 4:
                 deleteAll(head);
+                head = nullptr;
                 head = buildItem();
                 break;
         }
@@ -175,8 +179,11 @@ void menu(item *&head){
 
 int main(){
     cout << "Welcome" << endl;
+    cout << "This program allows you to make a wishlist "
+         << "of summer activites." << endl;
     item *wishList = buildItem();
     menu(wishList);
+    deleteAll(wishList);
     cout << "Goodbye" << endl;
 
     return 0;
